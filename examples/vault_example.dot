@@ -1,0 +1,48 @@
+digraph Infra { 
+        /* Global Sets */ 
+        compound=true; 
+        ranksep=1.25; 
+        rankdir=LR; 
+
+        node [shape=plaintext, fontsize=10, label=""]; 
+
+        bgcolor=white; 
+        edge [arrowsize=1, color=black]; 
+	graph[penwidth=0, labelloc="b"];
+
+        /* Nodes */ 
+
+	subgraph cluster_AppServer {label="AppServer"; fontsize=14; fontcolor="blue"; appserver_icon[image="../icons/osa_icons/osa_server_application.png"];};
+	subgraph cluster_Desktop {label="Client"; fontsize=14; fontcolor="blue"; desktop_icon[image="../icons/osa_icons/osa_desktop.png"];};
+	subgraph cluster_Haproxy {label="Haproxy"; fontsize=10; haproxy_icon[image="../icons/opensource_apps/haproxy.png"];};
+	subgraph cluster_Vault_1 {label="Master"; fontsize=10;  vault1_icon[image="../icons/opensource_apps/vault.png"];};
+	subgraph cluster_Vault_2 {label="Standby"; fontsize=10; vault2_icon[image="../icons/opensource_apps/vault.png"];};
+	subgraph cluster_Vault_3 {label="Standby"; fontsize=10; vault3_icon[image="../icons/opensource_apps/vault.png"];};
+	subgraph cluster_Consul_DNS {label="DNS_Round_Robin"; fontsize=10; dns_icon[image="../icons/infra_services/dns.png"];};
+	subgraph cluster_Consul_1 {label="Consul"; fontsize=10; consul1_icon[image="../icons/opensource_apps/consul.png"];};
+	subgraph cluster_Consul_2 {label="Consul"; fontsize=10; consul2_icon[image="../icons/opensource_apps/consul.png"];};
+	subgraph cluster_Consul_3 {label="Consul"; fontsize=10; consul3_icon[image="../icons/opensource_apps/consul.png"];};
+        
+        
+        /* Relationships */ 
+        desktop_icon ->  haproxy_icon [ label="administer", fontsize=8, color="red" ]; 
+        appserver_icon ->  haproxy_icon [ label="query", fontsize=8, color="red" ]; 
+        haproxy_icon ->  vault1_icon [ label="active", fontsize=8, color="red" ]; 
+        haproxy_icon ->  vault2_icon [ label="standby", fontsize=8, color="green" ]; 
+        haproxy_icon ->  vault3_icon [ label="standby", fontsize=8, color="green" ]; 
+        vault1_icon ->  dns_icon [ label="config store", fontsize=8, color="green" ]; 
+        vault2_icon ->  vault1_icon [ label="redirect", fontsize=8, color="blue" ]; 
+        vault3_icon ->  vault1_icon [ label="redirect", fontsize=8, color="blue" ]; 
+        vault2_icon ->  dns_icon [ label="config store", fontsize=8, color="green" ]; 
+        vault3_icon ->  dns_icon [ label="config store", fontsize=8, color="green" ]; 
+        dns_icon ->  consul1_icon [ label="config store", fontsize=8, color="green" ]; 
+        dns_icon ->  consul2_icon [ label="config store", fontsize=8, color="green" ]; 
+        dns_icon ->  consul3_icon [ label="config store", fontsize=8, color="green" ]; 
+
+	/* Label Diagram */
+	labelloc="t";
+	fontsize="28"
+        label="Vault Infrastructure"; 
+
+
+} 

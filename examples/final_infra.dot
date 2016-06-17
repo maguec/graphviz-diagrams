@@ -1,0 +1,67 @@
+digraph Infra { 
+
+        /* Global Sets */ 
+        compound=true; 
+        ranksep=1.25; 
+        rankdir=LR; 
+
+        node [shape=plaintext, fontsize=10, label=""]; 
+
+        bgcolor=white; 
+        edge [arrowsize=1, color=black]; 
+	graph[penwidth=0, labelloc="b"];
+
+        /* Nodes */ 
+
+	subgraph cluster_Servers {label="Servers"; Servers_icon[image="../icons/osa_icons/osa_server_application.png"];};
+	subgraph cluster_Redis {label="Redis"; Redis_icon[image="../icons/opensource_apps/redis.png"];};
+	subgraph cluster_Logstash {label="Logstash"; Logstash_icon[image="../icons/opensource_apps/logstash.png"];};
+	subgraph cluster_Haproxy {label="Haproxy"; Haproxy_icon[image="../icons/opensource_apps/haproxy.png"];};
+	subgraph cluster_Parser1 {label="Parser1"; Parser1_icon[image="../icons/opensource_apps/logstash.png"];};
+	subgraph cluster_ParserX {label="ParserX"; ParserX_icon[image="../icons/opensource_apps/logstash.png"];};
+	subgraph cluster_Elasticsearch {label="Elasticsearch"; Elasticsearch_icon[image="../icons/opensource_apps/elasticsearch.png"];};
+	subgraph cluster_Kibana {label="Kibana"; Kibana_icon[image="../icons/opensource_apps/kibana.png"];};
+	subgraph cluster_User {label="User"; User_icon[image="../icons/osa_icons/osa_user_blue.png"];};
+	subgraph cluster_Grafana {label="Grafana"; Grafana_icon[image="../icons/opensource_apps/grafana.png"];};
+	subgraph cluster_GraphiteAPI {label="API"; GraphiteAPI_icon[image="../icons/opensource_apps/graphite_api.png"];};
+	subgraph cluster_Cyanite {label="API"; Cyanite_icon[image="../icons/opensource_apps/cyanite.png"];};
+	subgraph cluster_Cassandra {label=""; Cassandra_icon[image="../icons/opensource_apps/cassandra.png"];};
+	subgraph cluster_Statsd {label="Statsd"; Statsd_icon[image="../icons/opensource_apps/statsd.png"];};
+	subgraph cluster_Riemann {label="Riemann"; Riemann_icon[image="../icons/opensource_apps/riemann.png"];};
+	subgraph cluster_Relay {label="CarbonRelay"; Relay_icon[image="../icons/infra_services/relay.png"];};
+	subgraph cluster_Pagerduty {label="PagerDuty"; Pagerduty_icon[image="../icons/service_providers/pagerduty.png"];};
+	subgraph cluster_Hipchat {label="Hipchat"; Hipchat_icon[image="../icons/service_providers/hipchat.png"];};
+        
+        
+        /* Relationships */ 
+        Servers_icon -> Haproxy_icon [ label="shipper", fontsize=8 ]; 
+        Servers_icon -> Relay_icon [ label="collectd", fontsize=8 ]; 
+        Haproxy_icon -> Logstash_icon [ label="shipper", fontsize=8 ]; 
+        Logstash_icon -> Redis_icon; 
+        Parser1_icon -> Redis_icon [ label="read", fontsize=8, color="blue" ]; 
+        ParserX_icon -> Redis_icon [ label="read", fontsize=8, color="blue" ]; 
+        ParserX_icon -> Elasticsearch_icon [ label="write", fontsize=8, color="green", style="bold" ]; 
+        Parser1_icon -> Elasticsearch_icon [ label="write", fontsize=8, color="green", style="bold" ];
+        Parser1_icon -> Statsd_icon [ label="UDP", fontsize=8, color="green" ];
+        ParserX_icon -> Statsd_icon [ label="UDP", fontsize=8, color="green" ];
+        Parser1_icon -> Riemann_icon [ label="UDP", fontsize=8, color="red" ];
+        ParserX_icon -> Riemann_icon [ label="UDP", fontsize=8, color="red" ];
+        Relay_icon -> Riemann_icon [ label="TCP", fontsize=8, color="red" ];
+        Relay_icon -> Cyanite_icon [ label="TCP", fontsize=8, color="red" ];
+        Kibana_icon -> Elasticsearch_icon [ label="read", fontsize=8 ];
+        User_icon -> Kibana_icon [ label="HTTPS", fontsize=8 ];
+        User_icon -> Grafana_icon [ label="HTTPS", fontsize=8 ];
+        Grafana_icon -> GraphiteAPI_icon [ label="HTTP", fontsize=8 ];
+        GraphiteAPI_icon -> Cyanite_icon [ label="HTTP", fontsize=8 ];
+        Cyanite_icon -> Cassandra_icon [ label="TCP", fontsize=8];
+        Statsd_icon -> Cyanite_icon [ label="TCP", fontsize=8 ];
+        Riemann_icon -> Hipchat_icon [ label="HTTPS", fontsize=8 ];
+        Riemann_icon -> Pagerduty_icon [ label="HTTPS", fontsize=8 ];
+
+	/* Label Diagram */
+	labelloc="t";
+	fontsize="28"
+        label="Logging/Graphing/Alerting Infrastructure"; 
+
+
+} 
