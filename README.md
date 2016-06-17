@@ -29,3 +29,10 @@ Contains a few example drawings
 ```
 dot -Tpng input.dot > output.png
 ```
+
+## Examples
+
+(https://raw.githubusercontent.com/maguec/graphviz-diagrams/master/examples/final_infra.png)
+
+(https://raw.githubusercontent.com/maguec/graphviz-diagrams/master/examples/vault_example.png)
+
