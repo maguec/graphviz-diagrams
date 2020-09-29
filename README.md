@@ -32,6 +32,8 @@ dot -Tpng input.dot > output.png
 
 ## Examples
 
+![Example Application](https://raw.githubusercontent.com/maguec/graphviz-diagrams/master/examples/app.png)
+
 ![Example Infrastructure](https://raw.githubusercontent.com/maguec/graphviz-diagrams/master/examples/final_infra.png)
 
 ![Vault Infrastructure](https://raw.githubusercontent.com/maguec/graphviz-diagrams/master/examples/vault_example.png)

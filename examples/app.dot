@@ -1,0 +1,81 @@
+digraph root {
+	fontcolor="#2D3436";
+	fontname="Sans-Serif";
+	fontsize=13;
+	nodesep=0.6;
+	label=Production;
+	#pad=2;
+	rankdir=LR;
+	ranksep=0.75;
+	# splines=ortho; #boxed lines
+	subgraph cloud {
+		bgcolor="#E5F5FD";
+		fontcolor="#2D3436";
+		fontname="Sans-Serif";
+		fontsize=12;
+		labeljust=l;
+		pencolor="#AEB6BE";
+		shape=box;
+		style=rounded;
+		kong [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/kong.png", label="Kong", labelloc=b, shape=box, style=rounded, height=1.5 ];
+		subgraph cachingservices {
+        		bgcolor="#E5F5FD";
+        		fontcolor="#2D3436";
+        		fontname="Sans-Serif";
+        		fontsize=12;
+        		label="Caching Layer";
+        		labeljust=l;
+        		pencolor="#AEB6BE";
+        		shape=box;
+        		style=rounded;
+        		redis [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/redis.png", label="Redis", labelloc=b, shape=box, style=rounded, height=1.0 ];
+        		redis2 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/redis.png", label="Redis Replica", labelloc=b, shape=none, height=1.0 ];
+			redis->redis2 [ color="green", dir=forward, fontcolor="green", fontname="Sans-Serif", fontsize=13, label="Sync" ];
+		};
+			subgraph persistence {
+        		bgcolor="#E5F5FD";
+        		fontcolor="#2D3436";
+        		fontname="Sans-Serif";
+        		fontsize=12;
+        		label="Persistence Layer";
+        		labeljust=l;
+        		pencolor="#AEB6BE";
+        		shape=box;
+        		style=rounded;
+        		elasticsearch1 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/elasticsearch.png", label="ES", labelloc=b, shape=none, height=1.0 ];
+        		elasticsearch2 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/elasticsearch.png", label="ES", labelloc=b, shape=none, height=1.0 ];
+        		elasticsearch3 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/elasticsearch.png", label="ES", labelloc=b, shape=none, height=1.0 ];
+        		haproxy [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/opensource_apps/haproxy.png", label="HAProxy", labelloc=b, shape=box, style=rounded, height=1.0, width=1.0 ];
+			elasticsearch1->elasticsearch2[ color="green", dir=forward, fontcolor="green", fontname="Sans-Serif", fontsize=13, label="Sync" ];
+			elasticsearch2->elasticsearch3[ color="green", dir=forward, fontcolor="green", fontname="Sans-Serif", fontsize=13, label="Sync" ];
+			elasticsearch3->elasticsearch1[ color="green", dir=forward, fontcolor="green", fontname="Sans-Serif", fontsize=13, label="Sync" ];
+			haproxy->elasticsearch1[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13 ];
+			haproxy->elasticsearch2[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13 ];
+			haproxy->elasticsearch3[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13 ];
+		};
+		subgraph clusterservices {
+        		bgcolor="#EBF3E7";
+        		fontcolor="#2D3436";
+        		fontname="Sans-Serif";
+        		fontsize=12;
+        		label="Application Layer";
+        		labeljust=l;
+        		pencolor="#AEB6BE";
+        		shape=box;
+        		style=rounded;
+        		appserver1 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/aws/Compute/Compute_AmazonEC2_instance.png", label="Server", labelloc=b, shape=none, height=1.0 ];
+        		appserver2 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/aws/Compute/Compute_AmazonEC2_instance.png", label="Server", labelloc=b, shape=none, height=1.0 ];
+        		appserver3 [ fixedsize=true, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, image="../icons/aws/Compute/Compute_AmazonEC2_instance.png", label="Server", labelloc=b, shape=none, height=1.0 ];
+		};
+        };
+	# relationships
+	kong->appserver1[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, label="http" ];
+	kong->appserver2[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, label="http" ];
+	kong->appserver3[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, label="http" ];
+	appserver1->redis[ color="blue", dir=forward, fontcolor="blue", fontname="Sans-Serif", fontsize=13, label="TCP" ];
+	appserver2->redis[ color="blue", dir=forward, fontcolor="blue", fontname="Sans-Serif", fontsize=13, label="TCP" ];
+	appserver3->redis[ color="blue", dir=forward, fontcolor="blue", fontname="Sans-Serif", fontsize=13, label="TCP" ];
+	appserver1->haproxy[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, label="HTTP" ];
+	appserver2->haproxy[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, label="HTTP" ];
+	appserver3->haproxy[ color="#7B8894", dir=forward, fontcolor="#2D3436", fontname="Sans-Serif", fontsize=13, label="HTTP" ];
+}
